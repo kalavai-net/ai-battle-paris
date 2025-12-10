@@ -65,7 +65,7 @@ warmup_ratio: 0.1
 evals_per_epoch: 4
 saves_per_epoch: 1
 
-deepspeed: zero3.json
+#deepspeed: zero3.json
 weight_decay: 0.0
 special_tokens:
   pad_token: "<|end_of_text|>"

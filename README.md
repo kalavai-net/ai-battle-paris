@@ -1,32 +1,50 @@
 # ai-battle-paris
 
-Create an account https://platform.kalavai.net
+1. Create a free account in the [Kalavai platform](https://platform.kalavai.net)
 
-Sign up for beta tester program: https://kalavai.net/beta
+2. Sign up for [beta tester program](https://kalavai.net/beta) for free credits.
 
 
 ## Training
 
-https://kalavai-net.github.io/kalavai-client/managed/axolotl/
+Full guide [here](https://kalavai-net.github.io/kalavai-client/managed/axolotl/). Fine tuning NousResearch/Llama-3.2-1B on the teknium/GPT4-LLM-Cleaned dataset.
 
-export RAY_DASHBOARD_URL="http://51.159.173.70:30570"
-export HF_TOKEN="your token"
-export HUB_MODEL_ID=organisation/model_name
+1. Edit `run.sh` with your details:
+
+- `RAY_DASHBOARD_URL`="http://51.159.173.70:30570" = <--  match your ray cluster dashboard URL
+- `HF_TOKEN`="your token" # <-- use your HuggingFace Token
+- `HUB_MODEL_ID`=organisation/model_name  # <-- use your HF org / username and the name you choose for the new model
+
 
 Configure local environment:
 
-python 3.12
-
+```bash
+# python version 3.12+
+sudo apt install python3.12-venv
 python3 -m venv env
 source env/bin/activate
-pip install ray[default]==2.49.0
+pip install -r requirements.txt
+```
 
-
-Run:
-
-ray job submit --address $RAY_DASHBOARD_URL --entrypoint-num-cpus 1 --working-dir assets/ --runtime-env-json='{"env_vars": {"HF_TOKEN": "'$HF_TOKEN'", "HUB_MODEL_ID": "'$HUB_MODEL_ID'"}, "pip": ["torch==2.6.0", "axolotl"], "config": {"setup_timeout_seconds": 1800}}' -- axolotl train axolotl.yaml --output-dir output/ --hub-model-id $HUB_MODEL_ID
-
+Run training:
+```bash
+sh run.sh
+```
 
 ## Inference
 
-GPUStack?
+Scalable inference with GPUStack. More details: https://kalavai-net.github.io/kalavai-client/managed/gpustack/
+
+1. Take the UI endpoint for the GPUStack deployed in the Kalavai Platform. In my case:
+```
+http://51.159.173.70:30677
+```
+
+2. Open the UI in the browser.
+
+3. Go to Workers / GPU to see your devices connected.
+
+4. Go to Deployments to deploy models in yout cluster!
+
+- Deploy a model in distributed nodes (multiGPU --> Qwen3 30B)
+- Deploy a model with multiple replicas --> 
